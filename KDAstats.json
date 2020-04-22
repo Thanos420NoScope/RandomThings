@@ -1,0 +1,5099 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "columns": [],
+      "datasource": null,
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "pageSize": null,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "",
+          "align": "center",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "time",
+          "thresholds": [],
+          "type": "date",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "center",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "link": false,
+          "linkTargetBlank": true,
+          "linkUrl": "https://explorer.chainweb.com/mainnet/txsearch?q=${__cell}",
+          "mappingType": 1,
+          "pattern": "Code",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "center",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": null,
+          "link": true,
+          "linkTargetBlank": true,
+          "linkTooltip": "Open in Explorer",
+          "linkUrl": "https://explorer.chainweb.com/mainnet/tx/${__cell}",
+          "mappingType": 1,
+          "pattern": "Request Key",
+          "thresholds": [],
+          "type": "number",
+          "unit": "none"
+        },
+        {
+          "alias": "",
+          "align": "center",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": null,
+          "mappingType": 1,
+          "pattern": "Chain ID",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "$__interval",
+                "none"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "code"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  $__timeGroupAlias(creationtime,$__interval),\n  code AS \"Code\",\n  max(requestkey) AS \"Request Key\",\n  max(chainid) AS \"Chain ID\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  code != '0'\nGROUP BY 1, code\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "code"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Code"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "requestkey"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Request Key"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "chainid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain ID"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "varchar",
+              "name": "",
+              "params": [
+                "code",
+                "!=",
+                "'0'"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Recent TXs",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "hiddenSeries": false,
+      "id": 11,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 0\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 0\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 1\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 1\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 2\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 2\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 3\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 3\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 4\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 4\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 5\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 5\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "F",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 6\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 6\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "G",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 7\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 7\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "H",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 8\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 8\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "I",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(MAX(115792089237316195423570985008687907853269984665640564039457584007913129639935 / blocks.target)/30) AS \"Chain 9\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 9\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "J",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Hashrate",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "Hs",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "hiddenSeries": false,
+      "id": 10,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 0\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 0\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 1\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 1\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 2\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 2\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 3\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 3\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 4\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 4\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 5\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 5\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "F",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 6\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 6\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "G",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 7\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 7\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "H",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 8\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 8\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "I",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n(115792089237316195423570985008687907853269984665640564039457584007913129639935 /MAX(blocks.target)/1000000000000) AS \"Chain 9\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 9\nGROUP BY \n         blocks.creationtime,\n         blocks.target\nORDER BY 1",
+          "refId": "J",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Difficulty",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "TH",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "hiddenSeries": false,
+      "id": 6,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 0\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 0\nGROUP BY 1\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 1\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 1\nGROUP BY 1\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 1"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "1"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 2\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 2\nGROUP BY 1\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 2"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "2"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 3\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 3\nGROUP BY 1\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 3"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "3"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 4\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 4\nGROUP BY 1\nORDER BY 1",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 4"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "4"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 5\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 5\nGROUP BY 1\nORDER BY 1",
+          "refId": "F",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 5"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "5"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 6\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 6\nGROUP BY 1\nORDER BY 1",
+          "refId": "G",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 6"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "6"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 7\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 7\nGROUP BY 1\nORDER BY 1",
+          "refId": "H",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 7"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "7"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 8\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 8\nGROUP BY 1\nORDER BY 1",
+          "refId": "I",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 8"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "8"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(height) AS \"Chain 9\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 9\nGROUP BY 1\nORDER BY 1",
+          "refId": "J",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 9"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "9"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Blocks",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "hiddenSeries": false,
+      "id": 9,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 0\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 0\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 1\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 1\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 2\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 2\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 3\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 3\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 4\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 4\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 5\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 5\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "F",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 6\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 6\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "G",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 7\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 7\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "H",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 8\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 8\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "I",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\nMAX(blocks.weight) AS \"Chain 9\"\nFROM blocks\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 9\nGROUP BY \n         blocks.creationtime,\n         blocks.weight\nORDER BY 1",
+          "refId": "J",
+          "select": [
+            [
+              {
+                "params": [
+                  "height"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Total Weight",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "hiddenSeries": false,
+      "id": 3,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 0\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 0\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 1\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 1\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 1"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "1"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 2\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 2\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 2"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "2"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 3\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 3\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 3"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "3"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 4\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 4\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 4"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "4"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 5\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 5\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "F",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 5"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "5"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 6\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 6\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "G",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 6"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "6"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 7\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 7\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "H",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 7"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "7"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 8\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 8\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "I",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 8"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "8"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  max(txid) AS \"Chain 9\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 9\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "J",
+          "select": [
+            [
+              {
+                "params": [
+                  "txid"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 9"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "9"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Total Transactions",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "short",
+          "label": "TXs",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 52
+      },
+      "hiddenSeries": false,
+      "id": 4,
+      "interval": "",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 0\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 0\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 1\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 1\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 1"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "1"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 2\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 2\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 2"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "2"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 3\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 3\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 3"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "3"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 4\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 4\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 4"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "4"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 5\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 5\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "F",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 5"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "5"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 6\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 6\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "G",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 6"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "6"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 7\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 7\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "H",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 7"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "7"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 8\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 8\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "I",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 8"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "8"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gas) AS \"Chain 9\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 9\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "J",
+          "select": [
+            [
+              {
+                "params": [
+                  "gas"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 9"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "9"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Average Gas Cost",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 52
+      },
+      "hiddenSeries": false,
+      "id": 5,
+      "interval": "",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 0\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 0\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 0"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 1\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 1\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 1"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "1"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 2\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 2\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 2"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "2"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 3\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 3\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 3"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "3"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 4\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 4\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "E",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 4"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "4"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 5\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 5\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "F",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 5"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "5"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 6\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 6\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "G",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 6"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "6"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 7\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 7\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "H",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 7"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "7"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 8\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 8\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "I",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 8"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "8"
+              ],
+              "type": "expression"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "10m",
+                "previous"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "creationtime"
+              ],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\nfloor(extract(epoch from creationtime)/60)*60 AS \"time\",\n  avg(gasprice) AS \"Chain 9\"\nFROM transactions\nWHERE\n  $__timeFilter(creationtime) AND\n  chainid = 9\nGROUP BY 1, creationtime\nORDER BY 1",
+          "refId": "J",
+          "select": [
+            [
+              {
+                "params": [
+                  "gasprice"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Chain 9"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "transactions",
+          "timeColumn": "creationtime",
+          "timeColumnType": "timestamptz",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "int4",
+              "name": "",
+              "params": [
+                "chainid",
+                "=",
+                "9"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Average Gas Price",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 22,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2020-04-15T21:30:40.420Z",
+    "to": "2020-04-21T16:50:54.134Z"
+  },
+  "timepicker": {
+    "hidden": false,
+    "nowDelay": "10m",
+    "refresh_intervals": [
+      "90s",
+      "5m",
+      "15m",
+      "30m",
+      "1h"
+    ]
+  },
+  "timezone": "browser",
+  "title": "Kadena Stats",
+  "uid": "-vVMF1qZz",
+  "variables": {
+    "list": []
+  },
+  "version": 48
+}

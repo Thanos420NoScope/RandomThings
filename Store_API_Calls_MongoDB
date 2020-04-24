@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # get the json data
-curl -X GET "LINK"  > results.json
+curl -X GET "LINK"  > /root/results.json
 
-# get currento ISO time
+# get current ISO time
 mongo --eval "ISODate()" > /root/date.txt
 
 # remove unnecesarry info from ISO call
 sed -i '1,4d' /root/date.txt
 
 # open the json to add more data
-RAW=$(truncate -s-2 results.json)
+truncate -s-2 /root/results.json
 
 # get the current date and put in variable
 DATE=$(cat /root/date.txt)
@@ -21,4 +21,4 @@ sed -i '1 s|$|'"$DATE"'|' /root/results.json
 sed -i '1 s|$|}]|' /root/results.json
 
 # push the new data to MongoDB
-mongoimport --db admin --collection price --file results.json --jsonArray
+mongoimport --db admin --collection price --file /root/results.json --jsonArray

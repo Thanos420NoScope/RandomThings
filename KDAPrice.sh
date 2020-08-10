@@ -4,8 +4,6 @@ curl -X GET "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=
 
 mongo --eval "ISODate()" > /root/date.txt
 sed -i '1,4d' /root/date.txt
-#sed -i 's/^.\{,8\}//' /root/date.txt
-#sed -i 's/.$//' /root/date.txt
 
 RAW=$(truncate -s-2 results.json)
 DATE=$(cat /root/date.txt)

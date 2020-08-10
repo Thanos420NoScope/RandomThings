@@ -7,6 +7,8 @@ sed -i '1,3d' /root/date.txt
 
 DATE=$(cat /root/date.txt)
 
+
+truncate -s-2 /root/results.json
 sed -i '1 s|$|,"Creation_Time":|' /root/results.json
 sed -i '1 s|$|'"$DATE"'|' /root/results.json
 sed -i '1 s|$|}]|' /root/results.json

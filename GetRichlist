@@ -1,0 +1,44 @@
+#/bin/bash
+
+#remove old files
+rm balances-*
+rm send.json
+
+#remove yesterday richlist
+mongo admin --eval 'db.balance.remove({})'
+
+#extract latest balance from every wallets
+for i in {0..19}; do sqlite3 sqlite/pact-v1-chain-$i.sqlite "select rowkey as acct_id, txid, ifnull(json_extract(rowdata, '$.balance.decimal'), json_extract(rowdata, '$.balance')) as 'balance' from 'coin_coin-table' as coin INNER JOIN (select rowkey as acct_id, max(txid) as last_txid from 'coin_coin-table' group by acct_id) latest ON coin.rowkey = latest.acct_id AND coin.txid = latest.last_txid order by acct_id asc" >> balances-$i.txt ; done
+
+#remove accounts with minimal balances
+for i in {0..19}; do awk '!/e-/' balances-$i.txt >> balances-fixed-$i.txt ; done
+
+#keep only what we need
+for i in {0..19}; do sed -i 's/|.*|/ /g' balances-fixed-$i.txt ; done
+
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain0: .[-1]} ]' balances-fixed-0.txt >> balances-0.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain1: .[-1]} ]' balances-fixed-1.txt >> balances-1.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain2: .[-1]} ]' balances-fixed-2.txt >> balances-2.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain3: .[-1]} ]' balances-fixed-3.txt >> balances-3.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain4: .[-1]} ]' balances-fixed-4.txt >> balances-4.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain5: .[-1]} ]' balances-fixed-5.txt >> balances-5.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain6: .[-1]} ]' balances-fixed-6.txt >> balances-6.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain7: .[-1]} ]' balances-fixed-7.txt >> balances-7.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain8: .[-1]} ]' balances-fixed-8.txt >> balances-8.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain9: .[-1]} ]' balances-fixed-9.txt >> balances-9.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain10: .[-1]} ]' balances-fixed-10.txt >> balances-10.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain11: .[-1]} ]' balances-fixed-11.txt >> balances-11.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain12: .[-1]} ]' balances-fixed-12.txt >> balances-12.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain13: .[-1]} ]' balances-fixed-13.txt >> balances-13.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain14: .[-1]} ]' balances-fixed-14.txt >> balances-14.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain15: .[-1]} ]' balances-fixed-15.txt >> balances-15.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain16: .[-1]} ]' balances-fixed-16.txt >> balances-16.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain17: .[-1]} ]' balances-fixed-17.txt >> balances-17.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain18: .[-1]} ]' balances-fixed-18.txt >> balances-18.json
+jq -Rs '[ split("\n")[] | select(length > 0) | split("|") | {Account: .[0], Chain19: .[-1]} ]' balances-fixed-19.txt >> balances-19.json
+
+#combine all chains
+jq -s 'flatten | group_by(.Account) | map(reduce .[] as $x ({}; . * $x))' balances-*.json balances-1*.json >> send.json
+
+#import balances into database
+#mongoimport --db admin --collection balance --file send.json --jsonArray

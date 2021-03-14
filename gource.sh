@@ -28,9 +28,10 @@ for repo in ${repos[@]}; do
   fi
   gource --output-custom-log repo.log tmp/repos/$repo
   sed -r "s#(.+)\|#\1|/$repo#" repo.log >> combo.log
+  sed -i -r "s#(.+)\|#\1|/kadena#" combo.log
 done
 
-# Sort by date - Combined repos.
+# Sort by date - Combined repos
 rm -f repo.log
 cat combo.log |sort -n >x.log
 mv x.log combo.log

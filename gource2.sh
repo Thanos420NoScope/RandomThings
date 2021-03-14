@@ -7,7 +7,7 @@ OUT_MP4="video.mp4"
 
 # Create data
 gource -1280x720 --camera-mode overview --output-ppm-stream $OUT_PPM --font-colour 336699 \
-       --background-image background.png --highlight-users --highlight-colour e0eeee \
+       --background-image background.jpg --highlight-users --highlight-colour e0eeee \
        --auto-skip-seconds 1 --seconds-per-day 0.2 --title "Kadena" --user-scale 1 \
        --user-image-dir tmp/avatars --bloom-multiplier 0.5 --bloom-intensity 0.5 --key \
        --file-extensions combo.log -e 0.5

@@ -6,11 +6,11 @@ OUT_PPM="/tmp/out.ppm"
 OUT_MP4="video.mp4"
 
 # Create data
-gource -1280x720 --camera-mode track --hide progress --output-ppm-stream $OUT_PPM \
-       --background-colour 000000 --font-colour 336699 --highlight-users --highlight-colour ff0000 \
-       --auto-skip-seconds 1 --seconds-per-day 0.05 --title "hmm..." --user-scale 1 \
+gource -1280x720 --camera-mode overview --output-ppm-stream $OUT_PPM --font-colour 336699 \
+       --background-image background.png --highlight-users --highlight-colour e0eeee \
+       --auto-skip-seconds 1 --seconds-per-day 0.2 --title "Kadena" --user-scale 1 \
        --user-image-dir tmp/avatars --bloom-multiplier 0.5 --bloom-intensity 0.5 --key \
-       --file-extensions combo.log
+       --file-extensions combo.log -e 0.5
 
 # Make video
 ffmpeg -y -r 25 -f image2pipe -vcodec ppm -i $OUT_PPM -vcodec libx264 -preset ultrafast \
